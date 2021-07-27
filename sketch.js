@@ -3,6 +3,9 @@ const CellTypes = {
 	SAND: 1,
 	WATER: 2,
 	ROCK: 3,
+    FIRE: 4,
+    PROPANE: 5,
+    WOOD: 6,
 }
 
 let rows = 50, cols = 50, cellSize = 10;
@@ -48,7 +51,19 @@ function setup() {
   buttons[4] = createButton('Rock');
   buttons[4].position(buttons[3].x + buttons[3].width + 1, buttons[3].y);
   buttons[4].mousePressed(selectRock);
-    
+
+  buttons[5] = createButton('Fire');
+  buttons[5].position(buttons[4].x + buttons[4].width + 1, buttons[4].y);
+  buttons[5].mousePressed(selectFire);  
+  
+  buttons[6] = createButton('Propane');
+  buttons[6].position(0, buttons[4].y + buttons[4].height + 1);
+  buttons[6].mousePressed(selectPropane);  
+  
+  buttons[7] = createButton('Wood');
+  buttons[7].position(buttons[6].x + buttons[6].width + 1, buttons[6].y);
+  buttons[7].mousePressed(selectWood);   
+  
 }
 
 function draw() {
@@ -85,7 +100,7 @@ function draw() {
         }
       }
       else {
-        eraseCells(row, col, row + cursorSizeSlider.value(), col + cursorSizeSlider.value());  
+        eraseCells(row, col, row + cursorSizeSlider.value(), col + cursorSizeSlider.value()); 
       }
       
     }    
@@ -124,6 +139,15 @@ function addCell(row, col, type) {
       case CellTypes.ROCK:
         cells.push(new Rock(col * cellSize, row * cellSize, row, col, type));
         break;
+      case CellTypes.FIRE:
+        cells.push(new Fire(col * cellSize, row * cellSize, row, col, type));
+        break;
+      case CellTypes.PROPANE:
+        cells.push(new Propane(col * cellSize, row * cellSize, row, col, type));
+        break;
+      case CellTypes.WOOD:
+        cells.push(new Wood(col * cellSize, row * cellSize, row, col, type));
+        break;        
     }
     grid[row][col] = type;
   }
@@ -155,4 +179,16 @@ function selectWater() {
 
 function selectRock() {
   selectedType = CellTypes.ROCK;
+}
+
+function selectFire() {
+  selectedType = CellTypes.FIRE;
+}
+
+function selectPropane() {
+  selectedType = CellTypes.PROPANE;
+}
+
+function selectWood() {
+  selectedType = CellTypes.WOOD;
 }
