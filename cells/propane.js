@@ -57,7 +57,7 @@ class Propane extends Cell {
           this.x -= cellSize;
           this.col--;
           this.direction = -1;
-        }
+        }     
       }
     }    
   }

@@ -1,3 +1,15 @@
+/* 
+ * This project's idea was inspired from: https://www.youtube.com/watch?v=VLZjd_Y1gJ8
+ *
+ * Each type of cell has it's own behaviours and some types can interact with each other
+ * Such as fire cells burning wood cells or sand sinking in water
+ *
+ * How to play:
+ * Left click to place cells of selected type
+ * Right click to erase easily without chosing the eraser option
+ * Mouse wheel to change cursor size without needing to adjust the slider
+ */
+
 const CellTypes = {
 	EMPTY: 0,
 	SAND: 1,
@@ -18,6 +30,9 @@ let cursorSizeSlider, cursorSize;
 
 function setup() {
   createCanvas(cols * cellSize, rows * cellSize);
+  for (let element of document.getElementsByClassName("p5Canvas")) {
+    element.addEventListener("contextmenu", (e) => e.preventDefault());
+  }
   noCursor();
   
   for (let x = 0; x < rows; x++) {
@@ -35,7 +50,7 @@ function setup() {
   buttons[1].position(0, rows * cellSize);
   buttons[1].mousePressed(selectEraser);
 
-  cursorSizeSlider = createSlider(1, (int) (rows / 5), (int) ((rows / 5 + 1) / 2), 1);
+  cursorSizeSlider = createSlider(1, (int) (rows / 4), (int) ((rows / 4 + 1) / 2), 1);
   cursorSizeSlider.position(buttons[1].x + buttons[1].width + 1, rows * cellSize);
   cursorSizeSlider.style('width', '80px');
   cursorSize = cursorSizeSlider.value() * cellSize;  
@@ -82,12 +97,12 @@ function draw() {
   rect((int) (mouseX / cellSize) * cellSize, (int) (mouseY / cellSize) * cellSize, cursorSize, cursorSize);
   
   if (mouseIsPressed) {
-    if (mouseX > 0 && mouseX < cols * cellSize && mouseY > 0 && mouseY < rows * cellSize) {
-      let row = (int) (mouseY / cellSize);
-      let col = (int) (mouseX / cellSize);
-      let x = (int) (col * cellSize);
-      let y = (int) (row * cellSize);
-      
+    let row = (int) (mouseY / cellSize);
+    let col = (int) (mouseX / cellSize);
+    let x = (int) (col * cellSize);
+    let y = (int) (row * cellSize);    
+    
+    if (mouseButton == LEFT && mouseX > 0 && mouseX < cols * cellSize && mouseY > 0 && mouseY < rows * cellSize) {  
       //add cells according to cursor size
       if (selectedType != CellTypes.EMPTY) {
         for (let i = row; i < row + cursorSizeSlider.value() && i < rows; i++) {
@@ -102,8 +117,10 @@ function draw() {
       else {
         eraseCells(row, col, row + cursorSizeSlider.value(), col + cursorSizeSlider.value()); 
       }
-      
-    }    
+    }  
+    else if (mouseButton == RIGHT) {
+      eraseCells(row, col, row + cursorSizeSlider.value(), col + cursorSizeSlider.value());       
+    }
   }  
   
 }
